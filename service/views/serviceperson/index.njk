@@ -1,0 +1,27 @@
+{% extends "layouts/main.njk" %}
+{% set pageName = "Serviceperson's Details" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% block content %}
+    <h1 class="govuk-heading-xl">Serviceperson's Details</h1>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukSummaryList({
+                rows: serviceperson
+            }) }}
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <div style="padding-top: 15px;border-top: 2px solid #1d70b8;">
+                <h3 class="govuk-heading-s">Related material</h3>
+                <p class="govuk-body">You can download a copy of the certificate for this serviceperson's memorial information.</p>
+                <a href="/serviceperson/{{ id }}/pdf" class="govuk-link">
+                    Download serviceperson’s details PDF
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <a href="/search-again" class="govuk-button">Search again</a>
+        </div>
+    </div>
+{% endblock %}

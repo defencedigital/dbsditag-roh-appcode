@@ -1,0 +1,45 @@
+{% extends "layouts/main.njk" %}
+{% set pageName = "Search the Armed Forces Memorial roll of honour" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">Search the Armed Forces Memorial roll of honour</h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <p class="govuk-body">You can search the Armed Forces Memorial roll of honour to see if someone's listed on it.</p>
+            <p class="govuk-body">The memorial commemorates members of the armed forces who died while in service on, or since, 1
+                January 1948 (includes Palestine 1945-47)</p>
+            <h2 class="govuk-heading-m">What you'll get</h2>
+            <ul class="govuk-list govuk-list--bullet">
+                <li class="govuk-list__item">rank</li>
+                <li class="govuk-list__item">type of service</li>
+                <li class="govuk-list__item">regiment or corps</li>
+                <li class="govuk-list__item">date of death</li>
+                <li class="govuk-list__item">burial place, if known</li>
+                <li class="govuk-list__item">whether someone's name is on the Memorial in the National Memorial Arboretum
+                </li>
+            </ul>
+            <div class="govuk-inset-text">
+                <p class="govuk-body">Limited information is available for those who died over 1 year but less than 2 years ago. No
+                    information is available for those dead less than 1 year.</p>
+            </div>
+            <p class="govuk-body">You can download or print a certificate from the roll of honour</p>
+            <h2 class="govuk-heading-m">What you'll need</h2>
+            <p class="govuk-body">You'll need the person's first name or initial and last name. If you have the person's service
+                number, this can be used to find the correct entry quicker.</p>
+            {{ govukButton({
+                text: "Start now",
+                href: "/service",
+                isStartButton: true
+            }) }}
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <div style="padding-top: 15px;border-top: 2px solid #1d70b8;">
+                <h3 class="govuk-heading-s">Related content</h3>
+            </div>
+        </div>
+    </div>
+{% endblock %}

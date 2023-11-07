@@ -1,0 +1,79 @@
+{% extends "layouts/main.njk" %}
+{% set pageName = "Give Feedback" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">Give feedback</h1>
+            <form action="/feedback" method="post" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                    {{ govukRadios({
+                    name: "satisfaction",
+                    fieldset: {
+                        legend: {
+                            text: "Overall how do you feel about the service you received today?",
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend govuk-fieldset__legend--m"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "Very satisfied",
+                            text: "Very satisfied"
+                        },
+                        {
+                            value: "Satisfied",
+                            text: "Satisfied"
+                        },
+                        {
+                            value: "Neither satisfied nor dissatisfied",
+                            text: "Neither satisfied nor dissatisfied"
+                        },
+                        {
+                            value: "Dissatisfied",
+                            text: "Dissatisfied"
+                        },
+                        {
+                            value: "Very dissatisfied",
+                            text: "Very dissatisfied"
+                        }
+                    ]
+                }) }}
+                    {{ govukTextarea({
+                    name: "feedback",
+                    id: "feedback",
+                    label: {
+                        text: "How could we improve this service? (optional)",
+                        classes: "govuk-label--l",
+                        isPageHeading: false
+                    },
+                    hint: {
+                        text: "Do not include personal or financial information, like your National Insurance number or credit card details."
+                    }
+                }) }}
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            Do you want a reply? (optional)
+                        </legend>
+                    </fieldset>
+                    <p class="govuk-body">If you would like us to get back to you, add your name and email address below. We'll only use
+                        this to respond to your feedback.</p>
+                    {{ govukInput({
+                    label: { text: "Name", isPageHeading: false },
+                    id: "name", name: "name", value: form[0].name,
+                    errorMessage: inline.name
+                }) }}
+                    {{ govukInput({
+                    label: { text: "Email address", isPageHeading: false },
+                    id: "email", name: "email", value: form[0].email,
+                    errorMessage: inline.email
+                }) }}
+                    {{ govukButton({
+                    text: "Send feedback"
+                }) }}
+                </form>
+            </div>
+        </div>
+    {% endblock %}

@@ -1,0 +1,37 @@
+{# {% extends "layout.njk" %} #}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% block body %}
+    {% if errors | length %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorList
+    }) }}
+    {% endif %}
+    {% if formOptions.isFileUpload %}
+        {% set actionString = formOptions.submitUrl + "?_csrf=" +  csrfToken %}
+        <form action="{{ actionString }}" enctype="multipart/form-data" method="post" novalidate="novalidate">
+        {% else %}
+            <form action="{{ formOptions.submitUrl }}" method="post" enctype="application/x-www-form-urlencoded">
+                {% if csrfToken %}
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                    {% endif %}
+                {% endif %}
+                {% for item in formOptions.formInputFields %}
+                    {% include "inputs/" + item.inputType + ".njk" %}
+                {% endfor %}
+                {% block formBody %}{% endblock %}
+                {{ govukButton({
+                    id: "continueButton",
+                    text: formOptions.submitButton.text if formOptions.submitButton.text else "Continue",
+                    preventDoubleClick: true
+                }) }}
+            </form>
+        {% endblock %}

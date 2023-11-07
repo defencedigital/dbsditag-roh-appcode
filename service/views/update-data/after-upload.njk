@@ -1,0 +1,30 @@
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% extends 'upload-form.njk' %}
+{% block formBody %}
+    {% if dataUpdateInfo.updatesFailedText %}
+        <p class="govuk-error-message  govuk-!-margin-bottom-7 govuk-!-margin-top-7">
+            <span class="govuk-visually-hidden">Error:</span>
+            {{ dataUpdateInfo.updatesFailedText }}
+        </p>
+    {% endif %}
+    {% if dataUpdateInfo.invalidIDsString %}
+        <div>
+            {{ govukDetails({
+                summaryText: "See the service number of the invalid records (First 50)",
+                text: dataUpdateInfo.invalidIDsString
+            }) }}
+        </div>
+    {% endif %}
+    {% if  dataUpdateInfo.updatesSucceededText %}
+        <div>
+            {{ govukInsetText({
+                text: dataUpdateInfo.updatesSucceededText
+            }) }}
+        </div>
+    {% endif %}
+    {{ govukWarningText({
+        text: "Transfering this data will remove all existing data from the production table and replace it with the data in the test table.",
+        iconFallbackText: "Warning"
+    }) }}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "layouts/main.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% block content %}
+    {{ govukPanel({
+        titleText: "Search complete",
+        html: "We found " + meta.totalItems + " matching records based on your criteria."
+    }) }}
+    <h1 class="govuk-heading-xl">Results</h1>
+    {{ govukTable({
+        caption: "",
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: true,
+        head: head,
+        rows: rows
+    }) }}
+    {{ govukPagination({
+        previous: links.previous ,
+        next: links.next,
+        items: links.items
+    }) }}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <a href="/search-again" class="govuk-button">Search again</a>
+        </div>
+    </div>
+{% endblock %}
