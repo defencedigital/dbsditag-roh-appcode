@@ -1,0 +1,14 @@
+{% extends "layouts/main.njk" %}{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% set pageName = "Update data - success" %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukPanel({
+                titleText: "Database updated",
+                text: updatesSucceededText
+            }) }}
+        </div>
+    </div>
+{% endblock %}

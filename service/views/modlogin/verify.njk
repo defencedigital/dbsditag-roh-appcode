@@ -1,0 +1,27 @@
+{% extends "layouts/main.njk" %}
+{% set pageName = "MOD Login - 2FA Verification" %}
+
+{% extends "layouts/main.njk" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">Verify Login</h1>
+            <form action="/modlogin/verify" method="post" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                <p class="govuk-body">Check your official MOD email for a verification code.</p>
+
+                {{ govukInput({
+                    label: { text: "Verify Code", isPageHeading: false },
+                    id: "verifyToken", name: "verifyToken", errorMessage: error,
+                    classes: "govuk-input--width-10", spellcheck: false
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

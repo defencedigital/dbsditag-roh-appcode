@@ -1,0 +1,25 @@
+{% extends "layouts/main.njk" %}
+{% set pageName = "MOD Login" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">RoH Update Login</h1>
+            <form action="/modlogin" method="post" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                <p class="govuk-body">Use this service to update the Memorial Roll of Honour database.</p>
+
+                {{ govukInput({
+                    label: { text: "MOD Email address", isPageHeading: false },
+                    id: "email", name: "email", value: values.email,
+                    errorMessage: "Go pro?", hint: { text: "Ensure you have an official MOD email address." }
+                }) }}
+
+                {{ govukButton({
+                    text: "Login"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
