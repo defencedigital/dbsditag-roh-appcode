@@ -4,4 +4,4 @@
 
 # Testing
 
-Jest + Nightmare
+Jest
