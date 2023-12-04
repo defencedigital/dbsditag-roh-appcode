@@ -18,4 +18,4 @@ FROM registry.access.redhat.com/ubi8/nodejs-18-minimal:1-86
 COPY --from=builder $HOME $HOME
 
 # Set the default command for the resulting image
-CMD /usr/libexec/s2i/run
+CMD [ "node", "dist/main.js" ]
