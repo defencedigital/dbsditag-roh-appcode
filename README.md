@@ -3,5 +3,3 @@
 # Installation
 
 # Testing
-
-Jest
