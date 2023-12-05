@@ -1,20 +1,21 @@
-FROM registry.access.redhat.com/ubi9/nodejs-18 as build-stage
+# First stage builds the application
+FROM registry.access.redhat.com/ubi8/nodejs-18:1-81 as builder
 
-WORKDIR /app
-COPY service/ .
-
+# Add application sources to a directory that the assemble script expects them
+# and set permissions so that the container runs without root access
 USER 0
-RUN npm install -g corepack
-RUN corepack enable
-RUN npm install -g npm@10.2.4
-RUN npm install -g rimraf "@nestjs/cli" graphql "@nestjs/graphql"
-RUN ls -la
-RUN yarn install
-RUN yarn build
+ADD service/ /tmp/src
+RUN chown -R 1001:0 /tmp/src
 USER 1001
 
-FROM registry.access.redhat.com/ubi9/nodejs-18
-COPY --from=build-stage /app/ "${HOME}"
-CMD [ "node", "dist/main.js" ]
+# Install the dependencies
+RUN /usr/libexec/s2i/assemble
 
-EXPOSE 8080
+# Second stage copies the application to the minimal image
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal:1-86
+
+# Copy the application source and build artefacts from the builder image to this one
+COPY --from=builder $HOME $HOME
+
+# Set the default command for the resulting image
+CMD [ "node", "dist/main.js" ]
