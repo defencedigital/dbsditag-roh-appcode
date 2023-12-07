@@ -1,9 +1,9 @@
 FROM registry.access.redhat.com/ubi9/nodejs-20 as build-stage
 
 WORKDIR /app
-COPY service/ .
 
 USER 0
+COPY service/ .
 RUN npm install -g corepack
 RUN corepack enable
 RUN npm install -g npm@10.2.4
