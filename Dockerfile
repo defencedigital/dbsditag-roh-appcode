@@ -4,13 +4,7 @@ WORKDIR /app
 
 USER 0
 COPY service/ .
-RUN npm install -g corepack
-RUN corepack enable
-RUN npm install -g npm@10.2.4
-RUN npm install -g rimraf "@nestjs/cli" graphql "@nestjs/graphql"
-RUN ls -la
-RUN yarn install
-RUN yarn build
+RUN npm install
 USER 1001
 
 FROM registry.access.redhat.com/ubi9/nodejs-20
