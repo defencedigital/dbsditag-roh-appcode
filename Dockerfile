@@ -11,9 +11,9 @@ RUN npm install @nestjs/cli
 USER 1001
 
 COPY service/ .
-
+USER 0
 RUN npm run build
-
+USER 1001
 # Production stage
 FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
 
