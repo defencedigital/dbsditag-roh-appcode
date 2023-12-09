@@ -1,40 +1,27 @@
-# Initialize arguments
-ARG NODE_VERSION=nodejs-20:1-15
-ARG NPM_VERSION=10.2.4
-ARG RED_HAT_REGISTRY=registry.access.redhat.com/ubi9
+# Build stage
+FROM registry.access.redhat.com/ubi9/nodejs-20 as build
 
-# Use Node.js 18 image from Red Hat's registry as build stage
-FROM ${RED_HAT_REGISTRY}/${NODE_VERSION} as build-stage
+WORKDIR /usr/src/app
 
-# Set the working directory to /app
-WORKDIR /app
+COPY service/package*.json ./
 
-# Switch to root user for installing packages
 USER 0
-
-# Install corepack, enable it, install specific npm version and other global packages
-RUN npm install -g corepack && corepack enable
-RUN npm install -g npm@${NPM_VERSION}
-RUN npm install -g rimraf "@nestjs/cli" graphql "@nestjs/graphql"
-
-# Install project dependencies and build the project
-RUN yarn install
-RUN yarn build
-
-# Switch back to non-root user
+RUN npm ci --only=production
 USER 1001
 
-# Copy the service directory into the Docker image
 COPY service/ .
 
-# Use Node.js 18 image from Red Hat's registry for the final image
-FROM ${RED_HAT_REGISTRY}/${NODE_VERSION}
+RUN npm run build
 
-# Copy the built app from the build stage into the final image
-COPY --from=build-stage /app/ "${HOME}"
+# Production stage
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
 
-# Set the command to start the app
-CMD [ "node", "dist/main.js" ]
+WORKDIR /usr/src/app
 
-# Expose port 8080
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/node_modules ./node_modules
+
+ENV PORT=8080
 EXPOSE 8080
+
+CMD [ "node", "dist/main.js" ]
