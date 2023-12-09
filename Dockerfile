@@ -7,6 +7,7 @@ COPY service/package*.json ./
 
 USER 0
 RUN npm ci --only=production
+RUN npm install @nestjs/cli
 USER 1001
 
 COPY service/ .
