@@ -54,7 +54,10 @@ const CookieManager = {
     value.analytics = false;
     value.seen = true;
 
-    scope.setCookie(scope.preference_name, value, { expires: 0 });
+    scope.setCookie(scope.preference_name, value, {  secure: true,
+      sameSite: "strict",
+      httpOnly: true,
+      expires: 0 });
     scope.banner.querySelector("#cookie-banner-message").setAttribute("hidden", true);
     scope.banner.querySelector("#cookie-banner-reject").removeAttribute("hidden");
   },
