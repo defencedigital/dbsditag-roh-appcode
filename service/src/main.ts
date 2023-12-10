@@ -33,7 +33,7 @@ async function bootstrap() {
       name: 'session',
       keys: [crypto.randomBytes(32).toString('hex')],
       maxAge: 0,
-      secure: false,
+      secure: true,
       sameSite: 'strict',
     }),
     helmet({
