@@ -83,6 +83,8 @@ async function bootstrap() {
   app.use(
     nestCsrf({
       ttl: 6000,
+      secure: true,
+      httpOnly: true,
     }),
   );
 

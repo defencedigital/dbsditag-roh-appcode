@@ -8,7 +8,11 @@ const CookieManager = {
   },
   init: function () {
     if (!this.hasCookie(this.preference_name)) {
-      this.setCookie(this.preference_name, this.cookie_preferences, { expires: 0 });
+      this.setCookie(this.preference_name, this.cookie_preferences, {
+        secure: true,
+        sameSite: "strict",
+        httpOnly: true,
+        expires: 0 });
     }
 
     const self = this;
