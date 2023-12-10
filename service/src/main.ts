@@ -10,11 +10,14 @@ import helmet from 'helmet';
 import * as crypto from 'crypto';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import {ConfigService} from "./services";
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const express = app.getHttpAdapter().getInstance();
+  const configService = app.get(ConfigService);
+
   const assets = join(__dirname, '..', 'public');
   const views = join(__dirname, '..', 'views');
   const cookieSession = require('cookie-session');
@@ -82,9 +85,7 @@ async function bootstrap() {
   app.set('trust proxy', true);
   app.use(
     nestCsrf({
-      ttl: 6000,
-      secure: true,
-      httpOnly: true,
+      ttl: 6000
     }),
   );
 

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InputTypeString, TableNames } from 'src/types/types';
+import process from "process";
+import fs from "fs";
 
 @Injectable()
 export class ConfigService {
@@ -66,6 +68,52 @@ export class ConfigService {
   static questionAnswers = {
     [ConfigService.formKeys.SERVICE]: ConfigService.OPTIONS_SERVICE_BRANCHES,
   };
+
+  async loadFromVault() {
+    let token = process.env.VAULT_SECRET ?? ''
+    const secretLocation = '/var/run/secrets/kubernetes.io/serviceaccount/token'
+
+    if(fs.existsSync(secretLocation)) {
+      const token = fs.readFileSync(secretLocation, 'utf8')
+    }
+
+    const content = await fetch(`${process.env.VAULT_ADDR}/auth/kubernetes/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Vault-Namespace': process.env.OC_NAMESPACE,
+      },
+      body: JSON.stringify({
+        role: process.env.VAULT_ROLE,
+        jwt: process.env.VAULT_SECRET ?? fs.readFileSync(secretLocation, 'utf8')
+      })
+    })
+
+
+    const json = await content.json()
+
+    if(json.auth) {
+      const token = json.auth.client_token
+
+      const secrets = await fetch(`${process.env.VAULT_ADDR}/${process.env.VAULT_KEY}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Vault-Namespace': process.env.OC_NAMESPACE,
+          'X-Vault-Token': token
+        }
+      });
+      const secretsJson = await secrets.json()
+
+      for(const key in secretsJson.data.data) {
+        process.env[key] = secretsJson.data.data[key]
+      }
+
+      return
+    }
+
+    return
+  }
 
   get(key: string, obj?: string): string {
     return ConfigService[key] ?? process.env[key] ?? false;
@@ -136,6 +184,7 @@ export class ConfigService {
   static DATA_SOURCE = 'DATA_SOURCE';
 
   static SESSION = 'SESSION';
+
   static COOKIE_PREFENCES = 'cookie_preferences';
 
   static YES_OR_NO = [
