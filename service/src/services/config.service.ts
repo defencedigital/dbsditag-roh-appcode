@@ -69,6 +69,10 @@ export class ConfigService {
     [ConfigService.formKeys.SERVICE]: ConfigService.OPTIONS_SERVICE_BRANCHES,
   };
 
+  constructor( ) {
+    this.loadFromVault()
+  }
+
   async loadFromVault() {
     let token = process.env.VAULT_SECRET ?? ''
     const secretLocation = '/var/run/secrets/kubernetes.io/serviceaccount/token'
