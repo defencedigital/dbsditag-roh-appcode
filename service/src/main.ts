@@ -34,6 +34,7 @@ async function bootstrap() {
       keys: [crypto.randomBytes(32).toString('hex')],
       maxAge: 0,
       secure: true,
+        httpOnly: true,
       sameSite: 'strict',
     }),
     helmet({
@@ -74,8 +75,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.use((req, res, next) => {
-    const nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
-    res.locals.nonce = nonce;
+    res.locals.nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
     next();
   });
 
