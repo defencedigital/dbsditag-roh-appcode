@@ -20,6 +20,8 @@ FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/src ./src
+COPY --from=build /usr/src/app/public ./public
 COPY --from=build /usr/src/app/node_modules ./node_modules
 
 ENV PORT=8080

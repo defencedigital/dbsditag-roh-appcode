@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InputTypeString, TableNames } from 'src/types/types';
-import process from "process";
-import fs from "fs";
+import { env } from "node:process";
+const fs = require('fs');
 
 @Injectable()
 export class ConfigService {
@@ -74,53 +74,53 @@ export class ConfigService {
   }
 
   async loadFromVault() {
-    console.log('Loading from vault')
+
+    let token = env['VAULT_SECRET']
     const secretLocation = '/var/run/secrets/kubernetes.io/serviceaccount/token'
-    let token = process.env.VAULT_SECRET ?? fs.readFileSync(secretLocation, 'utf8')
 
     if(fs.existsSync(secretLocation)) {
-      const token = fs.readFileSync(secretLocation, 'utf8')
+        token = fs.readFileSync(secretLocation, 'utf8')
     }
 
-    const content = await fetch(`${process.env.VAULT_ADDR}/auth/kubernetes/login`, {
+    const content = await fetch(`${env['VAULT_ADDR']}/auth/kubernetes/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Vault-Namespace': process.env.OC_NAMESPACE,
+        'X-Vault-Namespace': env['VAULT_NAMESPACE'],
       },
       body: JSON.stringify({
-        role: process.env.VAULT_ROLE,
+        role: env['VAULT_ROLE'],
         jwt: token
       })
     })
 
     const json = await content.json()
 
+    console.log('Content', json)
+
     if(json.auth) {
       const token = json.auth.client_token
 
-      const secrets = await fetch(`${process.env.VAULT_ADDR}/${process.env.VAULT_KEY}`, {
+      const secrets = await fetch(`${env['VAULT_ADDR']}/${env['VAULT_KEY']}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'X-Vault-Namespace': process.env.OC_NAMESPACE,
+          'X-Vault-Namespace': env['VAULT_NAMESPACE'],
           'X-Vault-Token': token
         }
       });
       const secretsJson = await secrets.json()
+      const secretData = secretsJson.data.data
 
-      for(const key in secretsJson.data.data) {
-        process.env[key] = secretsJson.data.data[key]
-      }
-
-      return
+      console.log('Secrets', secretData)
     }
+
 
     return
   }
 
   get(key: string, obj?: string): string {
-    return ConfigService[key] ?? process.env[key] ?? false;
+    return ConfigService[key] ?? env[key] ?? false;
   }
 
   getSectionPaths() {
