@@ -80,6 +80,7 @@ export class ConfigService {
 
     if(fs.existsSync(secretLocation)) {
         token = fs.readFileSync(secretLocation, 'utf8')
+      console.log(token);
     }
 
     const content = await fetch(`${env['VAULT_ADDR']}/auth/kubernetes/login`, {
