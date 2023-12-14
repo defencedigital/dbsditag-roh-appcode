@@ -75,11 +75,12 @@ export class ConfigService {
 
   async loadFromVault() {
 
-    let token = env['VAULT_SECRET']
+    let secretToken = env['VAULT_SECRET']
     const secretLocation = '/var/run/secrets/kubernetes.io/serviceaccount/token'
 
     if(fs.existsSync(secretLocation)) {
-        token = fs.readFileSync(secretLocation, 'utf8')
+        secretToken = fs.readFileSync(secretLocation, 'utf8')
+      console.log(secretToken);
     }
 
     const content = await fetch(`${env['VAULT_ADDR']}/auth/kubernetes/login`, {
@@ -90,7 +91,7 @@ export class ConfigService {
       },
       body: JSON.stringify({
         role: env['VAULT_ROLE'],
-        jwt: token
+        jwt: secretToken
       })
     })
 
