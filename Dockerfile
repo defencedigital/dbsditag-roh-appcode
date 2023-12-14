@@ -23,8 +23,11 @@ COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/src ./src
 COPY --from=build /usr/src/app/public ./public
 COPY --from=build /usr/src/app/node_modules ./node_modules
+
+USER 0
 RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app
 RUN chown -R 1001:0 /usr/src/app/dist/database && chmod -R g=u /usr/src/app/dist/database
+USER 1001
 
 ENV PORT=8080
 EXPOSE 8080
