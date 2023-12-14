@@ -27,6 +27,10 @@ COPY --from=build /usr/src/app/node_modules ./node_modules
 USER 0
 RUN touch /usr/src/app/afmd.db
 RUN chown 1001:0 /usr/src/app/afmd.db
+RUN chmod 777 /usr/src/app/afmd.db
+RUN touch /usr/src/afmd.db
+RUN chown 1001:0 /usr/src/afmd.db
+RUN chmod 777 /usr/src/afmd.db
 USER 1001
 
 ENV PORT=8080
