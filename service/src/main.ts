@@ -32,6 +32,11 @@ async function bootstrap() {
   app.setBaseViewsDir(views);
   app.setViewEngine('njk');
 
+    app.use((req, res: any, next) => {
+        res.locals.nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
+        next();
+    });
+
   app.use([
     cookieSession({
       name: 'session',
@@ -45,7 +50,7 @@ async function bootstrap() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com"], // Added Google Analytics
+          scriptSrc: [(req, res: any) => `'nonce-${res.locals.nonce}'`, "https://www.googletagmanager.com", "https://www.google-analytics.com"],
           styleSrc: ["'self'", "'unsafe-inline'"],
           imgSrc: ["'self'", "https://www.googletagmanager.com", "https://www.google-analytics.com"], // Added Google Analytics
           fontSrc: ["'self'", "https://fonts.gstatic.com"],
@@ -56,12 +61,6 @@ async function bootstrap() {
   ]);
   app.use(cookieParser());
   app.useGlobalFilters(new HttpExceptionFilter());
-
-  app.use((req, res, next) => {
-    res.locals.nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
-    next();
-  });
-
   app.set('trust proxy', true);
   app.use(
     nestCsrf({
