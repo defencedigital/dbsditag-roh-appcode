@@ -10,14 +10,11 @@ import helmet from 'helmet';
 import * as crypto from 'crypto';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
-import {ConfigService} from "./services";
-import {env} from "node:process";
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const express = app.getHttpAdapter().getInstance();
-  const configService = app.get(ConfigService);
 
   const assets = join(__dirname, '..', 'public');
   const views = join(__dirname, '..', 'views');
