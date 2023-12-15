@@ -44,23 +44,12 @@ async function bootstrap() {
     helmet({
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: [
-            "'self'"
-          ],
-          scriptSrc: [
-            "'self'",
-            "'unsafe-inline'"
-          ],
-          styleSrc: [
-            "'self'",
-            "'unsafe-inline'"
-          ],
-          imgSrc: [
-            "'self'",
-          ],
-          connectSrc: [
-            "'self'",
-          ],
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com"], // Added Google Analytics
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", "https://www.googletagmanager.com", "https://www.google-analytics.com"], // Added Google Analytics
+          fontSrc: ["'self'", "https://fonts.gstatic.com"],
+          connectSrc: ["'self'"],
         },
       },
     }),
