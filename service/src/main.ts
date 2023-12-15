@@ -51,7 +51,7 @@ async function bootstrap() {
         directives: {
           defaultSrc: ["'self'"],
           scriptSrc: [(req, res: any) => `'nonce-${res.locals.nonce}'`, "https://www.googletagmanager.com", "https://www.google-analytics.com"],
-          styleSrc: ["'self'", "'unsafe-inline'"],
+          styleSrc: [(req, res: any) => `'nonce-${res.locals.nonce}'`, "'self'"],
           imgSrc: ["'self'", "https://www.googletagmanager.com", "https://www.google-analytics.com"], // Added Google Analytics
           fontSrc: ["'self'", "https://fonts.gstatic.com"],
           connectSrc: ["'self'"],
