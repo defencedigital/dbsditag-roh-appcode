@@ -45,31 +45,21 @@ async function bootstrap() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: [
-            "'self'",
-            'www.googletagmanager.com',
-            'https://www.googletagmanager.com',
+            "'self'"
           ],
           scriptSrc: [
             "'self'",
-            "'unsafe-inline'",
-            'www.googletagmanager.com',
-            'https://www.googletagmanager.com',
+            "'unsafe-inline'"
           ],
           styleSrc: [
             "'self'",
-            "'unsafe-inline'",
-            'www.googletagmanager.com',
-            'https://www.googletagmanager.com',
+            "'unsafe-inline'"
           ],
           imgSrc: [
             "'self'",
-            'https://www.google-analytics.com',
-            'https://region1.google-analytics.com',
           ],
           connectSrc: [
             "'self'",
-            'https://www.google-analytics.com',
-            'https://region1.google-analytics.com',
           ],
         },
       },
