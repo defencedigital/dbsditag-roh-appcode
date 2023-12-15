@@ -14,8 +14,6 @@ import {ConfigService} from "./services";
 import {env} from "node:process";
 dotenv.config();
 
-
-
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const express = app.getHttpAdapter().getInstance();
@@ -40,7 +38,7 @@ async function bootstrap() {
       keys: [crypto.randomBytes(32).toString('hex')],
       maxAge: 0,
       secure: true,
-        httpOnly: true,
+      httpOnly: true,
       sameSite: 'strict',
     }),
     helmet({
