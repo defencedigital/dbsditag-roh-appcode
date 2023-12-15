@@ -60,7 +60,7 @@
             {% block bodyEnd %}
                 <script src="/assets/js/all.js" nonce="{{ nonce }}"></script>
                 <script src="/js/app.js" nonce="{{ nonce }}"></script>
-                <script src="https://www.googletagmanager.com/gtag/js?id={{ googleAnalyticsId }}"></script>
+                <script src="https://www.googletagmanager.com/gtag/js?id={{ googleAnalyticsId }}" nonce="{{ nonce }}"></script>
                 <script>
                     window.GOVUKFrontend.initAll();
                 </script>
