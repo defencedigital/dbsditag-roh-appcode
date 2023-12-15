@@ -80,7 +80,6 @@ export class ConfigService {
 
     if(fs.existsSync(secretLocation)) {
         secretToken = fs.readFileSync(secretLocation, 'utf8')
-      console.log(secretToken);
     }
 
     const content = await fetch(`${env['VAULT_ADDR']}/auth/kubernetes/login`, {
@@ -97,8 +96,6 @@ export class ConfigService {
 
     const json = await content.json()
 
-    console.log('Content', json)
-
     if(json.auth) {
       const token = json.auth.client_token
 
@@ -112,10 +109,7 @@ export class ConfigService {
       });
       const secretsJson = await secrets.json()
       const secretData = secretsJson.data.data
-
-      console.log('Secrets', secretData)
     }
-
 
     return
   }
