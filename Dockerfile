@@ -22,6 +22,8 @@ RUN yarn add @nestjs/cli
 
 RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app
 
+RUN mv /usr/src/app/afdm.db /usr/src/app/dist/database/afdm.db
+
 USER 1001
 # Production stage
 FROM registry.access.redhat.com/ubi9/nodejs-20
