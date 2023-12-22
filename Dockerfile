@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY service/package*.json ./
 
 USER 0
-RUN npm ci --only=production
+RUN npm ci --only=production --omit=dev
 RUN npm install @nestjs/cli
 USER 1001
 
@@ -22,8 +22,7 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/ .
 
 USER 0
-RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app
-RUN chown -R 1001:0 /usr/src/app/dist/database && chmod -R g=u /usr/src/app/dist/database
+
 USER 1001
 
 ENV PORT=8080
