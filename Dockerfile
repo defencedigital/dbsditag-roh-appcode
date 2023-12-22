@@ -15,7 +15,7 @@ USER 0
 RUN npm run build
 USER 1001
 # Production stage
-FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
+FROM registry.access.redhat.com/ubi9/nodejs-20
 
 WORKDIR /usr/src/app
 
@@ -23,6 +23,7 @@ COPY --from=build /usr/src/app/ .
 
 USER 0
 RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app
+RUN yum install -y --allowerasing curl jq
 USER 1001
 
 ENV PORT=8080
