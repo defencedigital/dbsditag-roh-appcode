@@ -32,6 +32,7 @@ COPY --from=build /usr/src/app/ .
 
 USER 0
 RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app
+RUN chmod -R 777 /usr/src/app
 RUN yum install -y --allowerasing curl jq
 USER 1001
 

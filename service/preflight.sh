@@ -6,6 +6,11 @@ secretLocation="/var/run/secrets/kubernetes.io/serviceaccount/token"
 
 echo $DB_URL
 
+if [[ -z "$DB_URL" ]]; then
+    echo "Error: DB_URL is not set"
+    exit 1
+fi
+
 # Read the Kubernetes service account token if it exists
 if [ -f "$secretLocation" ]; then
     secretToken=$(cat $secretLocation)
