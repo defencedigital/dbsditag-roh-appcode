@@ -22,10 +22,10 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/ .
 
 USER 0
-
+RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app
 USER 1001
 
 ENV PORT=8080
 EXPOSE 8080
 
-CMD [ "node", "dist/main.js" ]
+CMD [ "/bin/bash", "-c", "source /usr/src/app/preflight.sh && node dist/main.js" ]
