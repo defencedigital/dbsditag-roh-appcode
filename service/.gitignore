@@ -32,7 +32,7 @@ lerna-debug.log*
 
 sessions/*.json
 afdm.sqlite3
-afmd.db
+#afmd.db
 data.csv
 .env
 _manifest.yml

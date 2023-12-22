@@ -21,3 +21,4 @@ Staticfile.auth
 *.code-workspace
 
 .history
+.idea
