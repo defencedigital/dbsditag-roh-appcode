@@ -21,8 +21,8 @@ fi
 # if the value of VAULT_SECRET equals "NO_SECRET_HERE" then skip to the end
 if [ $VAULT_SECRET = "NO_SECRET_HERE" ]; then
     echo "Skipping Vault"
-    curl -o ./dist/database/afmd.db $DB_URL
-    chmod 777 ./dist/database/afmd.db
+#    curl -o ./dist/database/afmd.db $DB_URL
+#    chmod 777 ./dist/database/afmd.db
     exit 0
 fi
 
@@ -58,7 +58,7 @@ done
 
 # Download the database
 
-curl -o ./dist/database/afmd.db $DB_URL
-chmod 777 ./dist/database/afmd.db
+#curl -o ./dist/database/afmd.db $DB_URL
+#chmod 777 ./dist/database/afmd.db
 
 exit 0
