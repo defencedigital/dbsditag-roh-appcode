@@ -20,7 +20,9 @@ COPY tools/curl /usr/bin/curl
 COPY tools/jq /usr/bin/jq
 
 USER 0
-RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app && \
+RUN chmod +x /usr/bin/curl && \
+    chmod +x /usr/bin/jq && \
+    chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app && \
     chmod -R 777 /usr/src/app
 USER 1001
 ENV PORT=8080
