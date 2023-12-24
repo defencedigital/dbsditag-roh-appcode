@@ -9,16 +9,19 @@ RUN npm install -g corepack && \
     yarn build && \
     yarn add @nestjs/cli && \
     chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app
+COPY afmd.db /usr/src/app/dist/database/afmd.db
 USER 1001
 
 # Production stage
-FROM registry.access.redhat.com/ubi9/nodejs-20
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/ .
+COPY tools/curl /usr/bin/curl
+COPY tools/jq /usr/bin/jq
+
 USER 0
 RUN chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app && \
-    chmod -R 777 /usr/src/app && \
-    yum install -y --allowerasing curl jq
+    chmod -R 777 /usr/src/app
 USER 1001
 ENV PORT=8080
 EXPOSE 8080
