@@ -15,11 +15,11 @@ fi
 if [ -f "$secretLocation" ]; then
     secretToken=$(cat $secretLocation)
     echo "Found secret token"
-    echo $secretToken
+    echo "$secretToken"
 fi
 
 # if the value of VAULT_SECRET equals "NO_SECRET_HERE" then skip to the end
-if [ $VAULT_SECRET = "NO_SECRET_HERE" ]; then
+if [ "$secretToken" = "NO_SECRET_HERE" ]; then
     echo "Skipping Vault"
     exit 0
 fi
@@ -27,31 +27,31 @@ fi
 # Send a login request to Vault
 response=$(curl -H "X-Vault-Namespace: $VAULT_NAMESPACE" --request POST  \
     --data "{\"role\": \"$VAULT_ROLE\", \"jwt\": \"$secretToken\"}" \
-    $VAULT_ADDR/auth/kubernetes/login)
+    "$VAULT_ADDR"/auth/kubernetes/login)
 
-echo $response
+echo "$response"
 
 # Extract the Vault token from the response
-token=$(echo $response | jq -r '.auth.client_token')
+token=$(echo "$response" | jq -r '.auth.client_token')
 
-echo $token
+echo "$token"
 
 # Retrieve the secrets from Vault
 secrets=$(curl -H "X-Vault-Token: $token" -H "X-Vault-Namespace: $VAULT_NAMESPACE" \
-               --request GET $VAULT_ADDR/$VAULT_KEY)
+               --request GET "$VAULT_ADDR"/"$VAULT_KEY")
 
-echo $secrets
+echo "$secrets"
 
 # Extract the data from the secrets
-data=$(echo $secrets | jq -r '.data.data')
-echo $data
+data=$(echo "$secrets" | jq -r '.data.data')
+echo "$data"
 
 
 # Export the secrets as environment variables
-for key in $(echo $data | jq -r 'keys[]'); do
-    value=$(echo $data | jq -r --arg key "$key" '.[$key]')
+for key in $(echo "$data" | jq -r 'keys[]'); do
+    value=$(echo "$data" | jq -r --arg key "$key" '.[$key]')
     echo "$key=$value" >> .env
-    export $key="$value"
+    export "$key"="$value"
 done
 
 exit 0
