@@ -15,11 +15,16 @@ USER 1001
 # Production stage
 FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
 WORKDIR /usr/src/app
+RUN mkdir -p /etc/ssl/certs
+
 COPY --from=build /usr/src/app/ .
-COPY tools/curl /usr/bin/curl
-COPY tools/jq /usr/bin/jq
 
 USER 0
+COPY tools/curl /usr/bin/curl
+COPY tools/jq /usr/bin/jq
+COPY tools/preflight.sh /usr/src/app/preflight.sh
+COPY tools/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
 RUN chmod +x /usr/bin/curl && \
     chmod +x /usr/bin/jq && \
     chown -R 1001:0 /usr/src/app && chmod -R g=u /usr/src/app && \
