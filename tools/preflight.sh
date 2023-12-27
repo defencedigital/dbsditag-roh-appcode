@@ -4,8 +4,6 @@
 secretToken=${VAULT_SECRET:-"NO_SECRET_HERE"}
 secretLocation="/var/run/secrets/kubernetes.io/serviceaccount/token"
 
-echo $DB_URL
-
 if [[ -z "$DB_URL" ]]; then
     echo "Error: DB_URL is not set"
     exit 1
@@ -21,7 +19,6 @@ fi
 # if the value of VAULT_SECRET equals "NO_SECRET_HERE" then skip to the end
 if [ "$secretToken" = "NO_SECRET_HERE" ]; then
     echo "Skipping Vault"
-    exit 0
 fi
 
 # Send a login request to Vault
@@ -53,5 +50,3 @@ for key in $(echo "$data" | jq -r 'keys[]'); do
     echo "$key=$value" >> .env
     export "$key"="$value"
 done
-
-exit 0
