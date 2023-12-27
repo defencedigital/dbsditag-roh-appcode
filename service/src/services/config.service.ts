@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InputTypeString, TableNames } from 'src/types/types';
 import { env } from "node:process";
-const fs = require('fs');
 
 @Injectable()
 export class ConfigService {
@@ -68,51 +67,6 @@ export class ConfigService {
   static questionAnswers = {
     [ConfigService.formKeys.SERVICE]: ConfigService.OPTIONS_SERVICE_BRANCHES,
   };
-
-  constructor( ) {
-    this.loadFromVault()
-  }
-
-  async loadFromVault() {
-
-    let secretToken = env['VAULT_SECRET']
-    const secretLocation = '/var/run/secrets/kubernetes.io/serviceaccount/token'
-
-    if(fs.existsSync(secretLocation)) {
-        secretToken = fs.readFileSync(secretLocation, 'utf8')
-    }
-
-    const content = await fetch(`${env['VAULT_ADDR']}/auth/kubernetes/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Vault-Namespace': env['VAULT_NAMESPACE'],
-      },
-      body: JSON.stringify({
-        role: env['VAULT_ROLE'],
-        jwt: secretToken
-      })
-    })
-
-    const json = await content.json()
-
-    if(json.auth) {
-      const token = json.auth.client_token
-
-      const secrets = await fetch(`${env['VAULT_ADDR']}/${env['VAULT_KEY']}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Vault-Namespace': env['VAULT_NAMESPACE'],
-          'X-Vault-Token': token
-        }
-      });
-      const secretsJson = await secrets.json()
-      const secretData = secretsJson.data.data
-    }
-
-    return
-  }
 
   get(key: string, obj?: string): string {
     return ConfigService[key] ?? env[key] ?? false;
