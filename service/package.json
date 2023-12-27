@@ -46,7 +46,6 @@
         "notifications-node-client": "^7.0.3",
         "nunjucks": "^3.2.3",
         "pdfkit-table": "^0.1.99",
-        "pg": "^8.8.0",
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
         "rxjs": "^7.2.0",
