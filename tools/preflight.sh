@@ -4,10 +4,7 @@
 secretToken=${VAULT_SECRET:-"NO_SECRET_HERE"}
 secretLocation="/var/run/secrets/kubernetes.io/serviceaccount/token"
 
-if [[ -z "$DB_URL" ]]; then
-    echo "Error: DB_URL is not set"
-    exit 1
-fi
+
 
 # Read the Kubernetes service account token if it exists
 if [ -f "$secretLocation" ]; then
@@ -49,4 +46,8 @@ for key in $(echo "$data" | jq -r 'keys[]'); do
     value=$(echo "$data" | jq -r --arg key "$key" '.[$key]')
     echo "$key=$value" >> .env
     export "$key"="$value"
+
+    if [[ -z "$DB_URL" ]]; then
+        curl -o ./dist/database/afmd.db $DB_URL
+    fi
 done
